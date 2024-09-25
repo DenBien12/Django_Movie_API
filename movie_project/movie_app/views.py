@@ -35,14 +35,15 @@ class MoviesDetailApiView(APIView):
         except Movies.DoesNotExist:
             return None
 
-    def get(self, request, movie_id, *args, **kwargs):
-        movie_instace = self.get_object(movie_id)
+    def get(self, request, *args, **kwargs):
+        movie_id = kwargs.get('movie_id')  # Lấy movie_id từ kwargs
+        movie_instance = self.get_object(movie_id)
         if not movie_id:
             return Response(
                 {"res": "Object does not exist"},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = MovieSerializer(movie_instace)
+        serializer = MovieSerializer(movie_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request, movie_id, *args, **kwargs):
@@ -62,3 +63,17 @@ class MoviesDetailApiView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, *args, **kwargs):
+        movie_id = kwargs.get('movie_id')  # Lấy movie_id từ kwargs
+        movie_instance = self.get_object(movie_id)
+        if not movie_instance:
+            return Response(
+                {"res": "Object does not exist"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        movie_instance.delete()
+        return Response(
+            {"res": "Delete successful"},
+            status=status.HTTP_200_OK
+        )

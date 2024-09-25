@@ -12,7 +12,7 @@ class GerneSerializer(serializers.ModelSerializer):
             fields = '__all__'
 
 class MovieSerializer(serializers.ModelSerializer):
-        director= serializers.PrimaryKeyRelatedField(queryset=Director.objects.all(), many=True)   
+        director= serializers.PrimaryKeyRelatedField(queryset=Director.objects.all())
 
         genre = serializers.PrimaryKeyRelatedField(queryset=Gerne.objects.all(), many=True)
         class Meta:
